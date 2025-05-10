@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Content Creator App - Automate Your Social Media{% endblock %}
+
+{% block content %}
+<div class="landing-container">
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Automate Your Social Media Content</h1>
+            <p>Create engaging content for multiple platforms with the power of AI</p>
+            
+            <div class="hero-buttons">
+                {% if request.cookies.get("access_token") %}
+                <a href="/dashboard" class="btn-primary">Go to Dashboard</a>
+                {% else %}
+                <a href="/auth/signup" class="btn-primary">Get Started</a>
+                <a href="/auth/login" class="btn-secondary">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Powerful Features</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>AI-Powered Ideation</h3>
+                <p>Generate content ideas tailored to your target audience</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3>Multi-Format Content</h3>
+                <p>Create videos, images, and text for any platform</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Cross-Platform Posting</h3>
+                <p>Schedule and post to all your social media accounts</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Analytics & Insights</h3>
+                <p>Track performance and optimize your strategy</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Ready to Transform Your Content Strategy?</h2>
+        <p>Join thousands of creators who save time and increase engagement</p>
+        <a href="/auth/signup" class="btn-primary">Start For Free</a>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Content Creator App{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ user.full_name }}</h1>
+        <p>Your content creation dashboard</p>
+    </div>
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <h3>Content Ideas</h3>
+                <p class="stat-value">0</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-info">
+                <h3>Drafts</h3>
+                <p class="stat-value">0</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-info">
+                <h3>Published</h3>
+                <p class="stat-value">0</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">👁️</div>
+            <div class="stat-info">
+                <h3>Total Views</h3>
+                <p class="stat-value">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <button class="action-button ideation">
+                <span class="action-icon">💡</span>
+                <span class="action-text">Generate Ideas</span>
+            </button>
+            
+            <button class="action-button create-content">
+                <span class="action-icon">✏️</span>
+                <span class="action-text">Create Content</span>
+            </button>
+            
+            <button class="action-button schedule">
+                <span class="action-icon">📅</span>
+                <span class="action-text">Schedule Posts</span>
+            </button>
+            
+            <button class="action-button analytics">
+                <span class="action-icon">📈</span>
+                <span class="action-text">View Analytics</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="dashboard-recent">
+        <h2>Recent Activity</h2>
+        <div class="empty-state">
+            <p>You haven't created any content yet.</p>
+            <p>Start by generating ideas or creating your first piece of content!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='/js/dashboard.js') }}"></script>
+{% endblock %}
