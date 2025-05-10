@@ -1,4 +1,5 @@
 import os
+import logging
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -16,5 +17,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "default-secret-key-change-this")
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+    
+    # Application settings
+    DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
+    
+    # Logging settings
+    LOG_LEVEL: int = getattr(logging, os.getenv("LOG_LEVEL", "INFO"))
+    LOG_FILE: str = os.getenv("LOG_FILE", "app.log")
 
 settings = Settings()
