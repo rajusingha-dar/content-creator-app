@@ -1,9 +1,10 @@
+<!-- templates/auth/signup.html -->
 {% extends "base.html" %}
 
 {% block title %}Sign Up - Content Creator App{% endblock %}
 
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', path='/css/auth.css') }}">
+{% block head %}
+<link rel="stylesheet" href="/css/auth.css">
 {% endblock %}
 
 {% block content %}
@@ -11,47 +12,80 @@
     <div class="auth-card">
         <div class="auth-header">
             <h1>Create Account</h1>
-            <p>Join our platform to create amazing content</p>
+            <p class="auth-subtitle">Join our platform to create amazing content</p>
         </div>
-
-        {% if error %}
-        <div class="error-message">
-            {{ error }}
+        
+        <div class="auth-body">
+            <form id="signup-form" method="post" action="/auth/signup" enctype="application/x-www-form-urlencoded">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <input type="text" id="full_name" name="full_name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Create a password" required>
+                        <div class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <small class="text-muted">Password must be at least 8 characters long</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
+                        <div class="confirm-password-toggle" onclick="toggleConfirmPassword()">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <small id="password_match_message" class="text-muted">Both passwords must match</small>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                </div>
+                
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+            </form>
         </div>
-        {% endif %}
-
-        <form class="auth-form" method="post" action="/auth/signup">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Choose a username">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-            
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Create a password">
-                <small>Password must be at least 8 characters long</small>
-            </div>
-
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
-                <small id="password_match_message">Both passwords must match</small>
-            </div>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">Create Account</button>
-            </div>
-        </form>
         
         <div class="auth-footer">
             <p>Already have an account? <a href="/auth/login">Login</a></p>
@@ -61,5 +95,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', path='/js/auth.js') }}"></script>
+<script src="/js/auth.js"></script>
 {% endblock %}

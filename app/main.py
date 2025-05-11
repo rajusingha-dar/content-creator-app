@@ -1,3 +1,4 @@
+# app/main.py
 from fastapi import FastAPI, Request, Depends, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -6,12 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import time
 import traceback
+import os
 
-from app.api import auth
 from app.database import get_db, engine, Base
 from app.utils.security import get_current_user
 from app.utils.logger import get_logger
 from app.config import settings
+from app.api import auth, trending  # Import both routers correctly
 
 # Get logger for this module
 logger = get_logger(__name__)
@@ -69,17 +71,25 @@ async def log_requests(request: Request, call_next):
     logger.info(f"Response sent: {response.status_code}")
     return response
 
-# Mount static files
+# Mount static files - FIXED VERSION
 try:
+    # Create the directory if it doesn't exist
+    os.makedirs("app/static/js", exist_ok=True)
+    os.makedirs("app/static/css", exist_ok=True)
+    
+    # Mount static files directly to root paths
+    app.mount("/js", StaticFiles(directory="app/static/js"), name="js")
+    app.mount("/css", StaticFiles(directory="app/static/css"), name="css")
     app.mount("/static", StaticFiles(directory="app/static"), name="static")
     logger.info("Static files mounted successfully")
 except Exception as e:
     logger.error(f"Failed to mount static files: {str(e)}", exc_info=True)
     # Continue anyway, app should work but static files won't be available
 
-# Include routers
+# Include routers - Include both routers properly
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
-logger.info("Auth router included")
+app.include_router(trending.router, prefix="/api/trending", tags=["trending"])
+logger.info("Auth and Trending routers included")
 
 # Templates
 templates = Jinja2Templates(directory="templates")
@@ -110,6 +120,26 @@ async def dashboard(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse(url="/auth/login", status_code=status.HTTP_303_SEE_OTHER)
     except Exception as e:
         logger.error(f"Error serving dashboard page: {str(e)}", exc_info=True)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Internal server error"}
+        )
+    
+# Trending page route
+@app.get("/trending")
+async def trending_page(request: Request, db: Session = Depends(get_db)):
+    try:
+        # Check if user is logged in, but make this optional
+        try:
+            current_user = await get_current_user(request, db)
+            logger.info(f"User {current_user.username} accessed trending page")
+            return templates.TemplateResponse("trending.html", {"request": request, "user": current_user})
+        except HTTPException:
+            # Allow access even if not logged in
+            logger.info("Anonymous user accessed trending page")
+            return templates.TemplateResponse("trending.html", {"request": request, "user": None})
+    except Exception as e:
+        logger.error(f"Error serving trending page: {str(e)}", exc_info=True)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={"detail": "Internal server error"}

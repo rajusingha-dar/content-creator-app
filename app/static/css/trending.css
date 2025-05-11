@@ -1,0 +1,125 @@
+/* app/static/css/trending.css */
+.trending-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.trending-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.trending-search {
+    margin-bottom: 2rem;
+}
+
+.trending-loading {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.trending-results {
+    margin-top: 2rem;
+}
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.video-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+}
+
+.video-thumbnail {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.video-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.video-thumbnail:hover .video-play-button {
+    opacity: 1;
+}
+
+.video-info {
+    padding: 1rem;
+    background-color: #fff;
+}
+
+.video-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-channel {
+    font-size: 0.9rem;
+    color: #606060;
+    margin-bottom: 0.5rem;
+}
+
+.video-stats {
+    display: flex;
+    font-size: 0.8rem;
+    color: #606060;
+    gap: 1rem;
+}
+
+.trend-badge {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.analysis-section {
+    margin-bottom: 1.5rem;
+}
+
+.analysis-section h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+#trend-insights, #trend-recommendations {
+    font-size: 0.95rem;
+}

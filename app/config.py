@@ -21,8 +21,17 @@ class Settings(BaseSettings):
     # Application settings
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
     
+    # API Keys
+    YOUTUBE_API_KEY: str = os.getenv("YOUTUBE_API_KEY", "")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    
     # Logging settings
-    LOG_LEVEL: int = getattr(logging, os.getenv("LOG_LEVEL", "INFO"))
+    LOG_LEVEL_NAME: str = os.getenv("LOG_LEVEL", "INFO")
+    
+    @property
+    def LOG_LEVEL(self) -> int:
+        return getattr(logging, self.LOG_LEVEL_NAME)
+    
     LOG_FILE: str = os.getenv("LOG_FILE", "app.log")
 
 settings = Settings()

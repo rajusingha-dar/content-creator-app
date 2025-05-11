@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr, Field, ValidationError
+from typing import Optional
 
 from app.database import get_db
 from app.models.user import User
@@ -39,21 +40,30 @@ async def signup_page(request: Request):
 # Process login form
 @router.post("/login")
 async def login(
+    request: Request,
     response: Response,
     username: str = Form(...),
     password: str = Form(...),
+    remember: Optional[bool] = Form(False),
     db: Session = Depends(get_db)
 ):
+    """
+    Process login form submission
+    """
     logger.info(f"Login attempt for user: {username}")
+    
     try:
         user = authenticate_user(db, username, password)
+        
         if not user:
             logger.warning(f"Failed login attempt for user: {username}")
+            # Return to login page with error
             return templates.TemplateResponse(
                 "auth/login.html", 
-                {"request": {"headers": {}}, "error": "Invalid username or password"}
+                {"request": request, "error": "Invalid username or password"}
             )
         
+        # Create access token
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user.username}, expires_delta=access_token_expires
@@ -61,25 +71,33 @@ async def login(
         
         logger.info(f"User {username} logged in successfully")
         
+        # Create redirect response
         response = RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER)
+        
+        # Set cookie with token
         response.set_cookie(
             key="access_token", 
-            value=access_token, 
+            value=f"Bearer {access_token}",
             httponly=True,
-            max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
-            samesite="lax"
+            max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60 if remember else None,
+            expires=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60 if remember else None,
+            samesite="lax",
+            secure=not settings.DEBUG
         )
         
         return response
+        
     except Exception as e:
         logger.error(f"Login error for user {username}: {str(e)}", exc_info=True)
+        # Return to login page with error
         return templates.TemplateResponse(
             "auth/login.html", 
-            {"request": {"headers": {}}, "error": "An error occurred during login. Please try again."}
+            {"request": request, "error": "An error occurred during login. Please try again."}
         )
 
 @router.post("/signup")
 async def create_user(
+    request: Request,
     username: str = Form(...),
     email: str = Form(...),
     full_name: str = Form(...),
@@ -94,7 +112,7 @@ async def create_user(
             logger.warning(f"Signup failed: Passwords do not match for {username}")
             return templates.TemplateResponse(
                 "auth/signup.html", 
-                {"request": {"headers": {}}, "error": "Passwords do not match"}
+                {"request": request, "error": "Passwords do not match"}
             )
         
         # Validate input data using Pydantic model
@@ -109,7 +127,7 @@ async def create_user(
             logger.warning(f"Signup validation error for {username}: {str(e)}")
             return templates.TemplateResponse(
                 "auth/signup.html", 
-                {"request": {"headers": {}}, "error": f"Validation error: {str(e)}"}
+                {"request": request, "error": f"Validation error: {str(e)}"}
             )
         
         # Check if username already exists
@@ -118,7 +136,7 @@ async def create_user(
             logger.warning(f"Signup failed: Username {username} already exists")
             return templates.TemplateResponse(
                 "auth/signup.html", 
-                {"request": {"headers": {}}, "error": "Username already registered"}
+                {"request": request, "error": "Username already registered"}
             )
         
         # Check if email already exists
@@ -127,7 +145,7 @@ async def create_user(
             logger.warning(f"Signup failed: Email {email} already exists")
             return templates.TemplateResponse(
                 "auth/signup.html", 
-                {"request": {"headers": {}}, "error": "Email already registered"}
+                {"request": request, "error": "Email already registered"}
             )
         
         # Create new user
@@ -150,7 +168,7 @@ async def create_user(
         logger.error(f"User creation error for {username}: {str(e)}", exc_info=True)
         return templates.TemplateResponse(
             "auth/signup.html", 
-            {"request": {"headers": {}}, "error": "An error occurred during registration. Please try again."}
+            {"request": request, "error": "An error occurred during registration. Please try again."}
         )
 
 # Logout

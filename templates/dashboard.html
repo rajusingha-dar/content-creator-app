@@ -1,77 +1,113 @@
+<!-- templates/dashboard.html -->
 {% extends "base.html" %}
 
 {% block title %}Dashboard - Content Creator App{% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1>Welcome, {{ user.full_name }}</h1>
-        <p>Your content creation dashboard</p>
-    </div>
-
-    <div class="dashboard-stats">
-        <div class="stat-card">
-            <div class="stat-icon">📊</div>
-            <div class="stat-info">
-                <h3>Content Ideas</h3>
-                <p class="stat-value">0</p>
-            </div>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Welcome, {{ user.username }}</h1>
+            <p class="lead">Your content creation dashboard</p>
         </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">📝</div>
-            <div class="stat-info">
-                <h3>Drafts</h3>
-                <p class="stat-value">0</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">🚀</div>
-            <div class="stat-info">
-                <h3>Published</h3>
-                <p class="stat-value">0</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">👁️</div>
-            <div class="stat-info">
-                <h3>Total Views</h3>
-                <p class="stat-value">0</p>
-            </div>
+        <div class="col-md-4 text-md-end">
+            <a href="/auth/logout" class="btn btn-outline-secondary">Logout</a>
         </div>
     </div>
 
-    <div class="dashboard-actions">
-        <h2>Quick Actions</h2>
-        <div class="action-buttons">
-            <button class="action-button ideation">
-                <span class="action-icon">💡</span>
-                <span class="action-text">Generate Ideas</span>
-            </button>
-            
-            <button class="action-button create-content">
-                <span class="action-icon">✏️</span>
-                <span class="action-text">Create Content</span>
-            </button>
-            
-            <button class="action-button schedule">
-                <span class="action-icon">📅</span>
-                <span class="action-text">Schedule Posts</span>
-            </button>
-            
-            <button class="action-button analytics">
-                <span class="action-icon">📈</span>
-                <span class="action-text">View Analytics</span>
-            </button>
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card bg-light h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Content Ideas</h5>
+                    <h2 class="mt-3">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Drafts</h5>
+                    <h2 class="mt-3">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-rocket fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Published</h5>
+                    <h2 class="mt-3">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-eye fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Total Views</h5>
+                    <h2 class="mt-3">0</h2>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="dashboard-recent">
-        <h2>Recent Activity</h2>
-        <div class="empty-state">
-            <p>You haven't created any content yet.</p>
+    <h3 class="mb-3">Quick Actions</h3>
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Generate Ideas</h5>
+                    <a href="#" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-edit fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Create Content</h5>
+                    <a href="#" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Schedule Posts</h5>
+                    <a href="#" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">View Analytics</h5>
+                    <a href="#" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <!-- NEW TRENDING BUTTON -->
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-fire fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">YouTube Trending</h5>
+                    <a href="/trending" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-3">Recent Activity</h3>
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <p class="mb-1">You haven't created any content yet.</p>
             <p>Start by generating ideas or creating your first piece of content!</p>
         </div>
     </div>
@@ -79,5 +115,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', path='/js/dashboard.js') }}"></script>
+<script src="/js/dashboard.js"></script>
 {% endblock %}
